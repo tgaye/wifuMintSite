@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$WIFU</title>
+    <style>
+        @font-face {
+            font-family: 'GirlyFont';
+            src: url('peach.otf') format('truetype');
+        }
+
+        body {
+            font-family: 'GirlyFont', sans-serif; /* Apply custom font to all text */
+            margin: 0;
+            padding: 0;
+            background-image: url('background.jpg');
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: black;
+            overflow: hidden; 
+        }
+
+        header {
+            font-family: 'GirlyFont', sans-serif; /* Apply custom font to header */
+            height: 8vh;
+            background-color: #333; /* Example color */
+            color: white;
+            font-size: 5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .connectWalletBtn {
+            font-family: 'GirlyFont', sans-serif; /* Apply custom font to button */
+            width: 30vh;
+            font-size: 3vh;
+            position: fixed;
+            text-align: center;
+            justify-content: center;
+            top: 13%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 8vh;
+            border-radius: 2vh;
+            border: 3px solid rgb(0, 0, 0);
+        }
+
+        
+        .currentPrice {
+            font-family: 'GirlyFont', sans-serif; /* Apply custom font to button */
+            width: 30vh;
+            font-size: 4vh;
+            position: fixed;
+            text-align: center;
+            justify-content: center;
+            top: 93%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 8vh;
+            border-radius: 2vh;
+            border: 3px solid rgb(0, 0, 0);
+        }
+
+        .rounded-box {
+            font-family: 'GirlyFont', sans-serif; /* Apply custom font to rounded box */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            height: 60vh;
+            width: 72vh;
+            font-size: 4vh;
+            padding-bottom: 2vh;
+            text-align: center;
+            justify-content: center;
+            border: .5vh solid white;
+            border-radius: 3vh;
+            background-color: rgba(88, 134, 219, 0.8);
+            color: white;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            line-height: 2; /* Adjust the line height value to increase spacing */
+        }
+
+        .learn-more {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 58%;
+            font-size: 6vh;
+            z-index: 100000000000000000;
+            
+        }
+
+        .arrow-left,
+        .arrow-right {
+            transition: transform 0.3s; /* Smooth transition effect */
+            width: 8vh;
+            height: 8vh;
+            margin-bottom: 7vh;
+        }
+
+        .arrow-left:hover {
+            transform: scale(1.2); /* Scale by 20% on hover */
+        }
+
+        .arrow-right:hover {
+            transform: scale(1.2); /* Scale by 20% on hover */
+        }
+
+  
+
+        .column-left {
+            text-align: left;
+            width: 50%; /* Adjust the width as needed */
+            float: left;
+            margin-left: 8vh;
+            margin-bottom: 18vh;
+        }
+
+        .column-right {
+            text-align: left;
+            width: 50%; /* Adjust the width as needed */
+            float: right;
+            margin-bottom: 18vh;
+        }
+
+        .column-center {
+            text-align: center;
+            width: 86%; /* Adjust the width as needed */
+            float: right;
+            margin-bottom: 18vh;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 62vh; /* Adjust the margin as needed to position below the text divs */
+            z-index: 100000000000000000000000000;
+        }
+
+        .icon-container a {
+            margin: 0 1vw; /* Adjust the spacing between icons */
+        }
+
+        .icon-container img {
+            width: 6vh;
+            height: 6vh;
+            border: 3px solid rgb(0, 0, 0);
+            border-radius: 2vh;
+        }
+
+        #container {
+            position: absolute;
+            top: 38%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 37vh;
+            height: 37vh;
+            margin: 0 auto;
+            overflow: hidden; 
+            border: .5vh solid white;
+            border-radius: 2vh;
+            display:none;
+        }
+
+        #imageCanvas {
+            filter: blur(.5px); 
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            overflow: hidden; 
+        }
+
+        #overlayCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        #imageCanvas, #spriteCanvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            max-height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        $WIFU  -  Generative Art ERC404 NFT
+    </header>
+    <div id="rounded-box" class="rounded-box">
+        <div class="column-left">
+            Supply:<br>
+            Initial Liquidity:<br>
+            Tokens Per NFT:<br>
+            Token Supply:<br>
+        </div>
+        <div class="column-right">
+            &nbsp  2000 NFTs<br>
+            &nbsp  10k USD locked<br>
+            &nbsp  100<br>
+            &nbsp  200,000<br>
+        </div>
+    </div>
+
+    <div id="rounded-box2" class="rounded-box", style="display: none;">
+        <div class="column-left" style="margin-left: 14vh; margin-bottom: 23vh;">
+            Base Images:<br>
+            Sprites:<br>
+            Combinations:<br>
+        </div>
+        <div class="column-right" style="margin-bottom: 23vh;">
+            &nbsp  1000 <br>
+            &nbsp  12 <br>
+            &nbsp  12,000 <br>
+        </div>
+    </div>
+
+    <div id="rounded-box3" class="rounded-box", style="display: none; font-size: 2.5vh; line-height: 2;">
+        <div class="column-center">
+            $WIFU is powered by the new ERC404 framework.   It is the first ERC404 that generates it's art using code instead of static image files  (also known as generative art).
+            <br> <br>
+            Each NFT is soulbound to 100 $WIFU tokens.   Purchasing 100 $WIFU tokens will result in 1 NFT showing up in your wallet.
+        </div>
+        
+    </div>
+
+    <div class="learn-more">
+        <img src="arrowleft.png" alt="Arrow Left" class="arrow-left" onclick="decrementPage()">
+        <span style="margin-bottom: 8vh;">Learn More</span>
+        <span id="pageCount" style="display: none;">0</span>
+        <img src="arrowright.png" alt="Arrow Right" class="arrow-right" onclick="incrementPage()">
+    </div>
+
+    <div class="icon-container">
+        <a href="https://google.com" target="_blank"><img src="etherscan-logo.png" alt="Etherscan Logo"></a>
+        <a href="https://google.com" target="_blank"><img src="github-logo.png" alt="GitHub Logo"></a>
+        <a href="https://google.com" target="_blank"><img src="twitter-logo.png" alt="Twitter Logo"></a>
+        <a href="https://google.com" target="_blank"><img src="uniswap-logo.png" alt="Uniswap Logo"></a>
+    </div>
+
+    <div id="container">
+        <canvas id="imageCanvas" width="800" height="800"></canvas>
+        <canvas id="spriteCanvas" width="800" height="800" style="z-index: 2;"></canvas> <!-- New sprite canvas -->
+        <canvas id="overlayCanvas" width="800" height="800" style="z-index: 1;"></canvas>
+    </div>
+    
+
+    <!-- Button to trigger wallet connection -->
+    <button id="connectWalletBtn" class="connectWalletBtn">Connect Wallet</button>
+    <button id="connectWalletBtn" class="currentPrice">$WIFU: </button>
+
+    <script>
+        // Function to handle wallet connection
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    const userWalletAddress = accounts[0].substring(0, 13); // Get the first 7 characters
+                    document.getElementById("connectWalletBtn").innerText = userWalletAddress + "...";
+                } catch (error) {
+                    console.error("Error connecting to wallet:", error);
+                }
+            } else {
+                console.error("MetaMask is not installed");
+            }
+        }
+
+        // Event listener for the connect wallet button
+        document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
+
+
+        let pageIndex = 0;
+
+        function toggleRoundedBox(index) {
+            document.getElementById("rounded-box").style.display = "none";
+            document.getElementById("rounded-box2").style.display = "none";
+            document.getElementById("rounded-box3").style.display = "none";
+            document.getElementById("container").style.display = "none";
+
+            if (index === 0) {
+                document.getElementById("rounded-box").style.display = "flex";
+            } else if (index === 1) {
+                document.getElementById("rounded-box2").style.display = "flex";
+            } else if (index === 2) {
+                document.getElementById("rounded-box3").style.display = "flex";
+            } else if (index === 3) {
+                document.getElementById("container").style.display = "flex";
+            }
+        }
+
+        function incrementPage() {
+            pageIndex = (pageIndex + 1) % 4;
+            document.getElementById("pageCount").innerText = pageIndex;
+            toggleRoundedBox(pageIndex);
+        }
+
+        function decrementPage() {
+            pageIndex = (pageIndex - 1 + 4) % 4;
+            document.getElementById("pageCount").innerText = pageIndex;
+            toggleRoundedBox(pageIndex);
+        }
+    </script>
+
+    <script>
+    const imageCanvas = document.getElementById('imageCanvas');
+            const overlayCanvas = document.getElementById('overlayCanvas');
+            const imageCtx = imageCanvas.getContext('2d');
+            const overlayCtx = overlayCanvas.getContext('2d');
+
+            const dirtOverlaySrc = 'dirtoverlay.jpg';
+            let dirtOverlayImage;
+
+            const startPic = 1;
+            const endPic = 450;
+
+            const images = [];
+            for (let i = startPic; i <= endPic; i++) {
+                images.push(`https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/wifuPics/${i}.jpg`);
+            }
+
+            const spriteSheetSources = ['https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet1.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet2.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet3.png', 
+            'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet4.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet5.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet6.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet7.png', 
+            'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet8.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet9.png', 'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spritesheet10.png', 
+            'https://raw.githubusercontent.com/tgaye/WifuScreensaver/main/spreadsheet11.png']; // Add more as needed
+            const selectedImage = images[Math.floor(Math.random() * images.length)];
+
+            const cleanerSize = 105;
+            let speed = .9;
+            let cleaners = [];
+            const numCleaners = 5;
+
+            const delayBetweenCleaners = 200; // Delay between each cleaner start
+            let currentDelay = 0;
+
+            for (let i = 0; i < numCleaners; i++) {
+                const direction = randomizeDirection(speed);
+                cleaners.push({
+                    x: Math.random() * (overlayCanvas.width - cleanerSize),
+                    y: Math.random() * (overlayCanvas.height - cleanerSize),
+                    dx: direction.dx,
+                    dy: direction.dy,
+                    animationFrame: 0,
+                    direction: 'down',
+                    startCleaningDelay: currentDelay // Set the start delay for each cleaner
+                });
+
+                currentDelay += delayBetweenCleaners; // Increment the delay for the next cleaner
+            }
+
+            const loadImage = (src) => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.onerror = reject;
+                    img.src = src;
+                });
+            };
+
+            let currentImageIndex = 0; // To keep track of the current image index
+
+            const switchImageAndResetDirt = async () => {
+                // Pause cleaner movement
+                isMovementPaused = true;
+
+                // Wait for the new image to load
+                try {
+                    const img = await loadImage(images[(currentImageIndex + 1) % images.length]);
+                    imageCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+                    imageCtx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+                    currentImageIndex = (currentImageIndex + 1) % images.length; // Update image index after loading
+                    
+                    // Ensure the dirt overlay image is reloaded or redrawn correctly
+                    const dirtImg = await loadImage(dirtOverlaySrc);
+                    dirtOverlayImage = dirtImg;
+                    overlayCtx.drawImage(dirtOverlayImage, 0, 0, overlayCanvas.width, overlayCanvas.height);
+
+                    // Reset cleaner positions and directions, and clear the sprite canvas after the images have been updated
+                    cleaners.forEach((cleaner, index) => {
+                        cleaner.x = Math.random() * (overlayCanvas.width - cleanerSize);
+                        cleaner.y = Math.random() * (overlayCanvas.height - cleanerSize);
+                        const direction = randomizeDirection(speed);
+                        cleaner.dx = direction.dx;
+                        cleaner.dy = direction.dy;
+                        cleaner.animationFrame = 0; // Reset animation frame
+                        cleaner.startCleaningDelay = index * delayBetweenCleaners; // Reapply initial delay
+                    });
+
+                    // Clear the sprite canvas
+                    spriteCtx.clearRect(0, 0, spriteCanvas.width, spriteCanvas.height);
+
+                    // Load a new sprite sheet for the cleaners
+                    cleanerSprite = await loadImage(selectRandomSpriteSheet());
+                    // Redraw each cleaner sprite with the new sprite sheet
+                    cleaners.forEach(cleaner => {
+                        spriteCtx.drawImage(cleanerSprite, 0, 0, 48, 48, cleaner.x, cleaner.y, cleanerSize, cleanerSize);
+                    });
+
+                } catch (error) {
+                    console.error("Failed to load image or dirt overlay", error);
+                }
+
+                // Resume cleaner movement after the delay
+                setTimeout(() => {
+                    isMovementPaused = false;
+                }, 500); // Adjust this delay as needed
+            };
+
+            // Initial loading of a random image, to ensure it's also random at the start
+            currentImageIndex = Math.floor(Math.random() * images.length);
+            loadImage(images[currentImageIndex]).then(img => {
+                imageCtx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+
+            setTimeout(() => {
+                moveCleaners(); // Start the cleaning process after a delay of 1.5 seconds
+            }, 500);        
+
+            });
+
+            setInterval(switchImageAndResetDirt, 17000); // Switch image and reset dirt every 30000 milliseconds (30 seconds)
+
+
+            const drawDirt = () => {
+                if (!dirtOverlayImage) {
+                    loadImage(dirtOverlaySrc).then(img => {
+                        dirtOverlayImage = img;
+                        overlayCtx.drawImage(dirtOverlayImage, 0, 0, imageCanvas.width, imageCanvas.height);
+                    });
+                } else {
+                    overlayCtx.drawImage(dirtOverlayImage, 0, 0, imageCanvas.width, imageCanvas.height);
+                }
+            };
+
+
+            drawDirt();
+
+        function randomAngleDirection() {
+            const angle = 45 + Math.random() * (120 - 45); // Random angle between 45 and 120 degrees
+            const radians = angle * (Math.PI / 180); // Convert to radians
+            return {
+                dx:  speed,
+                dy:  speed
+            };
+        }
+
+        let cleanerSprite; // Holds the cleaner sprite image once loaded
+        const spriteCtx = document.getElementById('spriteCanvas').getContext('2d');
+        let lastPositions = new Array(numCleaners).fill(null); // Initialize last positions for each cleaner
+
+        // Function to select a random sprite sheet source
+        function selectRandomSpriteSheet() {
+            const index = Math.floor(Math.random() * spriteSheetSources.length);
+            return spriteSheetSources[index];
+        }
+
+        // Load the cleaner sprite
+        loadImage(selectRandomSpriteSheet()).then(img => {
+            cleanerSprite = img;
+            // Draw each cleaner sprite at its initial position using only the top-left 48x48 pixels of the sprite sheet
+            cleaners.forEach(cleaner => {
+                // Here we specify the source rectangle (0, 0, 48, 48) to crop the top-left 48x48 pixels
+                // And the destination rectangle (cleaner.x, cleaner.y, cleanerSize, cleanerSize) to draw the cropped image
+                spriteCtx.drawImage(cleanerSprite, 0, 0, 48, 48, cleaner.x, cleaner.y, cleanerSize, cleanerSize);
+            });
+            // Delay the start of their movement
+            setTimeout(() => {
+                moveCleaners(); // Now only responsible for moving the sprites
+            }, 500);
+        });
+
+        function getDirectionRow(dy, dx) {
+            // Assuming positive dy is downward, negative dy is upward,
+            // positive dx is rightward, and negative dx is leftward.
+            if (dy > 0) return 0; // Downward
+            if (dx < 0) return 1; // Left
+            if (dx > 0) return 2; // Right
+            if (dy < 0) return 3; // Upward
+            return 0; // Default to downward if no movement
+        }
+
+        const frameSwitchRate = 60; // Number of frames before switching sprites
+        const totalColumns = 3; // Total columns in the sprite sheet
+        const delayToRemoveDirt = 500; // Delay in milliseconds before starting to remove dirt
+        let isMovementPaused = false; // Flag to control the movement of cleaners
+
+        const moveCleaners = () => {
+            if (!isMovementPaused) {
+            spriteCtx.clearRect(0, 0, spriteCanvas.width, spriteCanvas.height); // Clear the sprite canvas
+                console.log("speed: " + speed);
+
+            cleaners.forEach(cleaner => {
+                // Update position
+
+                if (cleaner.startCleaningDelay <= 0) {
+                    cleaner.x += cleaner.dx;
+                    cleaner.y += cleaner.dy;
+
+                    // Update cleaner's direction based on movement
+                    cleaner.direction = getDirectionRow(cleaner.dy, cleaner.dx);
+                }
+
+
+                // Boundary collision detection and handling
+                if (cleaner.x <= 0 || cleaner.x >= overlayCanvas.width - cleanerSize) {
+                    cleaner.dx *= -1;
+                }
+                if (cleaner.y <= 0 || cleaner.y >= overlayCanvas.height - cleanerSize) {
+                    cleaner.dy *= -1;
+                }
+
+                // Update cleaner's direction based on movement
+                cleaner.direction = getDirectionRow(cleaner.dy, cleaner.dx);
+                
+                // Update animation frame for walking effect
+                cleaner.animationFrame = (cleaner.animationFrame + 1) % (totalColumns * frameSwitchRate);
+                const column = Math.floor(cleaner.animationFrame / frameSwitchRate);
+                const spriteX = column * 48; // Calculate X coordinate based on current column
+                const spriteY = cleaner.direction * 48; // Calculate Y coordinate based on direction
+
+                // Draw the cleaner sprite with walking animation
+                if (cleanerSprite) {
+                    spriteCtx.drawImage(cleanerSprite, spriteX, spriteY, 48, 48, cleaner.x, cleaner.y, cleanerSize, cleanerSize);
+                }
+
+                if (cleaner.startCleaningDelay > 0) {
+                // Still waiting, decrement the delay
+                cleaner.startCleaningDelay -= 1; 
+                } else {
+
+                // Create a feathered path on the overlay canvas
+                const radius = cleanerSize / 1.5;
+                const feather = 60; // Adjust for feather size
+                const x = cleaner.x + cleanerSize / 2;
+                const y = cleaner.y + cleanerSize / 2;
+
+                // Create radial gradient
+                const gradient = overlayCtx.createRadialGradient(x, y, radius - feather, x, y, radius);
+                gradient.addColorStop(0, 'rgba(0,0,0,1)');
+                gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+                overlayCtx.globalCompositeOperation = 'destination-out';
+                overlayCtx.fillStyle = gradient;
+                overlayCtx.beginPath();
+                overlayCtx.arc(x, y, radius, 0, Math.PI * 2);
+                overlayCtx.fill();
+                overlayCtx.globalCompositeOperation = 'source-over';
+                    
+                }
+
+            });
+            }
+
+            requestAnimationFrame(moveCleaners);
+        };
+
+
+        // Adjust this function to generate dx and dy such that dx^2 + dy^2 = speed^2
+        function randomizeDirection(speed) {
+            const angle = Math.random() * 2 * Math.PI; // Random angle in radians
+            return {
+                dx: Math.cos(angle) * speed,
+                dy: Math.sin(angle) * speed
+            };
+        }
+
+
+        // Load the cleaner sprite
+        loadImage(selectRandomSpriteSheet()).then(img => {
+            cleanerSprite = img;
+            // Draw each cleaner sprite at its initial position using only the top-left 48x48 pixels of the sprite sheet
+            cleaners.forEach(cleaner => {
+                // Here we specify the source rectangle (0, 0, 48, 48) to crop the top-left 48x48 pixels
+                // And the destination rectangle (cleaner.x, cleaner.y, cleanerSize, cleanerSize) to draw the cropped image
+                spriteCtx.drawImage(cleanerSprite, 0, 0, 48, 48, cleaner.x, cleaner.y, cleanerSize, cleanerSize);
+            });
+            // Delay the start of their movement
+            setTimeout(() => {
+                moveCleaners(); // Now only responsible for moving the sprites
+            }, 500);
+        });
+
+    </script>
+</body>
+</html>
